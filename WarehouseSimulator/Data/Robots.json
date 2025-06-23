@@ -1,0 +1,14 @@
+[
+  {
+    "Id": 1,
+    "IsAvailable": true,
+    "CurrentPosition": [ 8, 10 ],
+    "Inventory": [
+      {
+        "ProductId": 1,
+        "Quantity": 2
+      }
+    ]
+  }
+  
+]

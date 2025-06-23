@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Emma Schneider",
+    "Id": 1,
+    "Job": "Packer",
+    "IsAvailable": true,
+    "Position":[10,10],
+    "Inventory": [
+      {
+        "ProductId": 1,
+        "Quantity": 2
+      }
+    ]
+  }
+]

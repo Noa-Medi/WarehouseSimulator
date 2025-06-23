@@ -1,0 +1,43 @@
+[
+  {
+    "OrderId": 101,
+    "CustomerEmail": "customer1@example.com",
+    "Items": [
+      {
+        "Id": 1,
+        "Quantity": 2
+      },
+      {
+        "Id": 5,
+        "Quantity": 1
+      }
+    ],
+    "Status": "Pending"
+  },
+  {
+    "OrderId": 102,
+    "CustomerEmail": "customer2@example.com",
+    "Items": [
+      {
+        "Id": 3,
+        "Quantity": 1
+      }
+    ],
+    "Status": "Shipped"
+  },
+  {
+    "OrderId": 103,
+    "CustomerEmail": "customer3@example.com",
+    "Items": [
+      {
+        "Id": 2,
+        "Quantity": 1
+      },
+      {
+        "Id": 4,
+        "Quantity": 1
+      }
+    ],
+    "Status": "Processing"
+  }
+]

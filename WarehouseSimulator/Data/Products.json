@@ -1,0 +1,37 @@
+[
+  {
+    "Id": 1,
+    "Name": "Wireless Mouse",
+    "Stock": 50,
+    "ShelfLocation": [ 1, 1 ],
+    "Price": 19.99
+  },
+  {
+    "Id": 2,
+    "Name": "Mechanical Keyboard",
+    "Stock": 30,
+    "ShelfLocation": [ 3, 3 ],
+    "Price": 89.99
+  },
+  {
+    "Id": 3,
+    "Name": "27-inch Monitor",
+    "Stock": 15,
+    "ShelfLocation": [ 9, 7 ],
+    "Price": 249.99
+  },
+  {
+    "Id": 4,
+    "Name": "Noise-Canceling Headphones",
+    "Stock": 20,
+    "ShelfLocation": [ 1, 9 ],
+    "Price": 199.99
+  },
+  {
+    "Id": 5,
+    "Name": "USB-C Hub",
+    "Stock": 100,
+    "ShelfLocation": [ 9, 1 ],
+    "Price": 29.99
+  }
+]
