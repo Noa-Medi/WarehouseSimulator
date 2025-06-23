@@ -11,7 +11,7 @@ namespace WarehouseSimulator.Models
         public double Price { get; set; }
         public override string ToString()
         {
-            return $"ID : {Id} , Name : {Name} , Stock : {Stock} , ShelfLocation : [{ShelfLocation}] , Price : {Price}";
+            return $"{{ ID : {Id} }} ,\n {{ Name : {Name} }} ,\n {{ Stock : {Stock} }} , \n {{ ShelfLocation : [{ShelfLocation}] }} ,\n {{ Price : {Price} }}";
         }
     }
 

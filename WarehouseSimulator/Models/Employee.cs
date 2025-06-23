@@ -27,7 +27,7 @@ namespace WarehouseSimulator.Models
 
         public override string ToString()
         {
-            return $"{{ ID : {Id} }} , {{ Name : {Name} }} , {{ IsAvailable : {IsAvailable} }} , {{ Job : {Job} }} , {{ Inventory : {Inventory} }} , {{ Position : {Position} }}";
+            return $"{{ ID : {Id} }} ,\n{{ Name : {Name} }} ,\n{{ IsAvailable : {IsAvailable} }} ,\n{{ Job : {Job} }} ,\n{{ Inventory : {Inventory} }} ,\n{{ Position : {Position} }}";
         }
     }
 }

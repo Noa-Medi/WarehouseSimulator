@@ -19,7 +19,7 @@ namespace WarehouseSimulator.Models
 
         public override string ToString()
         {
-            return $"{{ ID : {Id} }} , {{ IsAvailable : {IsAvailable} }} , {{ Inventory : {Inventory} }} , {{ CurrentPosition : {CurrentPosition} }} , {{ MovementDelayMs : {MovementDelayMs} }}";
+            return $"{{ ID : {Id} }} ,\n {{ IsAvailable : {IsAvailable} }} ,\n {{ Inventory : {Inventory} }} ,\n {{ CurrentPosition : {CurrentPosition} }} ,\n {{ MovementDelayMs : {MovementDelayMs} }}";
         }
 
         public async Task MoveAlongPath(List<(int x, int y)> path)

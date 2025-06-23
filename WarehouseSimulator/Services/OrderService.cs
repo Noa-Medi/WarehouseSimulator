@@ -10,16 +10,16 @@ namespace WarehouseSimulator.Services
 {
     public class OrderService
     {
-        public static Warehouse warehouse { get; set; }
+        public  Warehouse warehouse { get; set; }
 
-        public OrderService(Warehouse warehouse) => OrderService.warehouse = warehouse;
-        public static void AddOrder(string customerEmail, List<OrderItem> orderItems) {
+        public OrderService(Warehouse warehouse) => this.warehouse = warehouse;
+        public  void AddOrder(string customerEmail, List<OrderItem> orderItems) {
             Random random = new Random();
             int randomId = random.Next(100000, 999999);
             Order newOrder = new Order(OrderId : randomId , CustomerEmail : customerEmail , Items : orderItems);
             warehouse.Orders.Add(newOrder);
         }
-        public static bool RemoveOrder(int orderId)
+        public  bool RemoveOrder(int orderId)
         {
            
                 Order order = warehouse.Orders.First(o => o.OrderId == orderId);
@@ -33,7 +33,7 @@ namespace WarehouseSimulator.Services
                 return false;
             }
         }
-        public static async Task ProsseccOrder(Order order  ) {
+        public  async Task ProsseccOrder(Order order  ) {
        
             if (order != null && order.Status == "Pending")
             {
@@ -91,7 +91,7 @@ namespace WarehouseSimulator.Services
 
     }
 
-        private static void RestockProduct(int productId, int quantity)
+        private  void RestockProduct(int productId, int quantity)
         {
             var product = warehouse.Products.FirstOrDefault(p => productId == p.Id);
             product.Stock += quantity;

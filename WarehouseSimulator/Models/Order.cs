@@ -12,14 +12,21 @@ namespace WarehouseSimulator.Models
         public string CustomerEmail { get; set; }
         public List<OrderItem> Items { get; set; }
         public string Status { get; set; }
-        public Order(int OrderId, string CustomerEmail, List<OrderItem> Items) {
+        public Order(int OrderId, string CustomerEmail, List<OrderItem> Items , string Status = "Pending") {
             this.OrderId = OrderId;
             this.CustomerEmail = CustomerEmail;
             this.Items = Items;
+            this.Status = Status;
         }
         public override string ToString()
         {
-            return $"{{ OrderID : {OrderId } }} , {{ CustomerEmail : {CustomerEmail} }} , {{ Items : {Items} }} , {{ Status : {Status} }}";
+            List<string> ordersString = new List<string>();
+            foreach (OrderItem orderItem in Items)
+            {
+                ordersString.Add(orderItem.ToString());
+            }
+            string joinedItems = string.Join(",\n", ordersString);
+            return $"{{ OrderID : {OrderId} }},\n{{ CustomerEmail : {CustomerEmail} }},\n{{ Items : [\n{joinedItems}\n] }},\n{{ Status : {Status} }}";
         }
     }
 
@@ -31,9 +38,15 @@ namespace WarehouseSimulator.Models
         public int Id { get; set; } 
         public int Quantity { get; set; }
 
+        public OrderItem (int id, int quantity)
+        {
+            Id = id;
+            Quantity = quantity;
+        }
+
         public override string ToString()
         {
-            return $"{{ Id : {Id} }} , {{ Quantity : {Quantity} }}";
+            return $" {{ Id : {Id} }} ,\n  {{ Quantity : {Quantity} }}";
         }
     }
 
