@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using WarehouseSimulator.Utils;
 
 namespace WarehouseSimulator.Models
@@ -17,9 +15,17 @@ namespace WarehouseSimulator.Models
         // Movement speed in milliseconds per cell
         public int MovementDelayMs { get; set; } = 1000;
 
+        public Robot(int id, (int x, int y) currentPosition, int movementDelayMs, bool isAvailable = true)
+        {
+            Id = id;
+            CurrentPosition = currentPosition;
+            MovementDelayMs = movementDelayMs;
+            IsAvailable = isAvailable;
+        }
+
         public override string ToString()
         {
-            return $"{{ ID : {Id} }} ,\n {{ IsAvailable : {IsAvailable} }} ,\n {{ Inventory : {Inventory} }} ,\n {{ CurrentPosition : {CurrentPosition} }} ,\n {{ MovementDelayMs : {MovementDelayMs} }}";
+            return $"{{ ID : {Id} }} ,{{ IsAvailable : {IsAvailable} }} ,{{ Inventory : {Inventory} }} ,{{ CurrentPosition : {CurrentPosition} }} ,{{ MovementDelayMs : {MovementDelayMs} }}";
         }
 
         public async Task MoveAlongPath(List<(int x, int y)> path)

@@ -9,7 +9,7 @@ namespace WarehouseSimulator.Services
 
         public ProductService(Warehouse warehouse) => Warehouse = warehouse;
 
-        public void AddProduct(string productName, double price, int? shelfId, (int x, int y)? shelfLocation, int stock = 20)
+        public void AddProduct(string productName, double price, int? shelfId, int stock = 20)
         {
             var random = new Random();
             int randomId = random.Next(100000, 999999);
@@ -18,8 +18,8 @@ namespace WarehouseSimulator.Services
                 name: productName,
                 stock: stock, // Use the parameter instead of hardcoded 20
                 price: price,
-                shelfId: shelfId,
-                shelfLocation: shelfLocation);
+                shelfId: shelfId
+                );
 
             Warehouse.Products.Add(product);
         }

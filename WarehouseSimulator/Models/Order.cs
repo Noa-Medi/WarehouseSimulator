@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WarehouseSimulator.Models
 {
@@ -12,7 +8,8 @@ namespace WarehouseSimulator.Models
         public string CustomerEmail { get; set; }
         public List<OrderItem> Items { get; set; }
         public string Status { get; set; }
-        public Order(int OrderId, string CustomerEmail, List<OrderItem> Items , string Status = "Pending") {
+        public Order(int OrderId, string CustomerEmail, List<OrderItem> Items, string Status = "Pending")
+        {
             this.OrderId = OrderId;
             this.CustomerEmail = CustomerEmail;
             this.Items = Items;
@@ -25,8 +22,8 @@ namespace WarehouseSimulator.Models
             {
                 ordersString.Add(orderItem.ToString());
             }
-            string joinedItems = string.Join(",\n", ordersString);
-            return $"{{ OrderID : {OrderId} }},\n{{ CustomerEmail : {CustomerEmail} }},\n{{ Items : [\n{joinedItems}\n] }},\n{{ Status : {Status} }}";
+            string joinedItems = string.Join(",", ordersString);
+            return $"{{ OrderID : {OrderId} }},{{ CustomerEmail : {CustomerEmail} }},{{ Items : [{joinedItems}] }},{{ Status : {Status} }}";
         }
     }
 
@@ -35,10 +32,10 @@ namespace WarehouseSimulator.Models
 
     public class OrderItem
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public int Quantity { get; set; }
 
-        public OrderItem (int id, int quantity)
+        public OrderItem(int id, int quantity)
         {
             Id = id;
             Quantity = quantity;
@@ -46,9 +43,9 @@ namespace WarehouseSimulator.Models
 
         public override string ToString()
         {
-            return $" {{ Id : {Id} }} ,\n  {{ Quantity : {Quantity} }}";
+            return $"{{ Id : {Id} }} ,{{ Quantity : {Quantity} }}";
         }
     }
 
-    
+
 }

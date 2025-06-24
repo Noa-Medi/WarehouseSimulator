@@ -20,7 +20,19 @@ namespace WarehouseSimulator.Models
         }
 
 
-
+        public override string ToString()
+        {
+            List<string> shelvesString = new List<string>();
+            foreach (Product product in Inventory)
+            {
+                shelvesString.Add(product.ToString());
+            }
+            string joinedItems = string.Join(",\n", shelvesString);
+            return
+                $"{{ ID : {Id} }} ,{{ Name : {Name} }} ,{{ Location : {Location} }} " +
+                $"{{ Inventory : {joinedItems} }} ,{{ MaxCapacity : {MaxCapacity} }}"
+                ;
+        }
 
     }
 }

@@ -12,6 +12,7 @@ namespace WarehouseSimulator.Services
         public Warehouse Warehouse { get; set; }
 
         public OrderService(Warehouse warehouse) => this.Warehouse = warehouse;
+
         public void AddOrder(string customerEmail, List<OrderItem> orderItems)
         {
             Random random = new Random();
@@ -34,8 +35,10 @@ namespace WarehouseSimulator.Services
                 return false;
             }
         }
-        public async Task ProsseccOrder(Order order)
+        public async Task ProcessOrder(Order order)
         {
+            ShelfService shelfService = new ShelfService(warehouse: Warehouse);
+            RobotService robotService = new RobotService(warehouse: Warehouse);
 
             if (order != null && order.Status == "Pending")
             {
@@ -50,18 +53,18 @@ namespace WarehouseSimulator.Services
                         continue;
                     }
 
-                    Robot robot = await RobotService.WaitForAvailableRobotAsync(Warehouse.Robots);
-                    if (product.ShelfLocation == null || !product.ShelfLocation.HasValue)
+                    Robot robot = await robotService.WaitForAvailableRobotAsync(Warehouse.Robots);
+                    if (product.ShelfId == null || !product.ShelfId.HasValue)
                     {
                         Logger.Log($"There is no assigned shelf for this Product {product.Name}", ConsoleColor.Red);
                         continue;
                     }
+                    (int x, int y) productShelfLocation = shelfService.GetShelfLocation(shelfId: product.ShelfId.Value);
 
-                    // Now we know ShelfLocation has a value, so we can safely access it
-                    var shelfLocation = product.ShelfLocation.Value;
-                    var path = Pathfinder.FindPath(robot.CurrentPosition, shelfLocation, Warehouse.Grid);
 
-                    Logger.Log($"🤖 Robot #{robot.Id} moving to {product.ShelfLocation}...", ConsoleColor.Yellow);
+                    var path = Pathfinder.FindPath(robot.CurrentPosition, productShelfLocation, Warehouse.Grid);
+
+                    Logger.Log($"🤖 Robot #{robot.Id} moving to {productShelfLocation}...", ConsoleColor.Yellow);
 
                     // Visualize each movement step
                     foreach (var step in path)

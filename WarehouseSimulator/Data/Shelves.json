@@ -9,7 +9,6 @@
                 "Name": "Wireless Mouse",
                 "Stock": 50,
                 "ShelfId": 192347,
-                "ShelfLocation": [ 1, 1 ],
                 "Price": 19.99
             }
         ],
@@ -25,7 +24,6 @@
                 "Name": "Mechanical Keyboard",
                 "Stock": 30,
                 "ShelfId": 546812,
-                "ShelfLocation": [ 3, 3 ],
                 "Price": 89.99
             }
         ],
@@ -41,7 +39,6 @@
                 "Name": "27-inch Monitor",
                 "Stock": 15,
                 "ShelfId": 876158,
-                "ShelfLocation": [ 9, 7 ],
                 "Price": 249.99
             }
         ],
@@ -57,7 +54,6 @@
                 "Name": "Noise-Canceling Headphones",
                 "Stock": 20,
                 "ShelfId": 846216,
-                "ShelfLocation": [ 1, 9 ],
                 "Price": 199.99
             },
             {
@@ -65,7 +61,6 @@
                 "Name": "USB-C Hub",
                 "Stock": 20,
                 "ShelfId": 846216,
-                "ShelfLocation": [ 1, 9 ],
                 "Price": 29.99
             }
         ],

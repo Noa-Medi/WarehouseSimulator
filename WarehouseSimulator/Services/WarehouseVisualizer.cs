@@ -8,6 +8,7 @@ namespace WarehouseSimulator.Services
     {
         public static void DrawWarehouse(Warehouse warehouse)
         {
+            ShelfService shelfService = new ShelfService(warehouse: warehouse);
             Console.Clear();
             Console.WriteLine("=== WAREHOUSE LAYOUT ===");
 
@@ -18,8 +19,15 @@ namespace WarehouseSimulator.Services
                     var cell = warehouse.Grid[x, y];
                     var robot = warehouse.Robots.FirstOrDefault(r =>
                         r.CurrentPosition.x == x && r.CurrentPosition.y == y);
+
                     var product = warehouse.Products.FirstOrDefault(p =>
-                        p.ShelfLocation.Value.x == x && p.ShelfLocation.Value.y == y);
+                    {
+                        if (!p.ShelfId.HasValue) return false;
+                        var location = shelfService.GetShelfLocation(p.ShelfId.Value);
+                        return location.x == x && location.y == y;
+                    });
+
+
 
                     if (robot != null)
                     {
