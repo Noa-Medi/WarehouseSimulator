@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 
 namespace WarehouseSimulator.Utils
@@ -38,7 +37,7 @@ namespace WarehouseSimulator.Utils
 
                 foreach (var neighbor in GetNeighbors(current, grid))
                 {
-                    if (closedSet.Contains(neighbor)) continue; 
+                    if (closedSet.Contains(neighbor)) continue;
 
                     // Allow movement through empty spaces OR the target position
                     if (grid[neighbor.x, neighbor.y] == 1 && !(neighbor.x == target.x && neighbor.y == target.y))
@@ -77,7 +76,7 @@ namespace WarehouseSimulator.Utils
         private static int Heuristic((int x, int y) a, (int x, int y) b)
         => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y); // Manhattan distance
 
-        private static List<(int x, int y)> ReconstructPath(Dictionary<(int x, int y), (int x, int y)> cameFrom ,Node current)
+        private static List<(int x, int y)> ReconstructPath(Dictionary<(int x, int y), (int x, int y)> cameFrom, Node current)
         {
             // 1. Create an empty path list
             var path = new List<(int x, int y)>();

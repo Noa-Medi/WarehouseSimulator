@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.Json;
-using System.Threading.Tasks;
 using WarehouseSimulator.Models;
 using WarehouseSimulator.Services;
 using WarehouseSimulator.Utils;
@@ -27,9 +24,10 @@ namespace WarehouseSimulator
                 Robots = JsonSerializer.Deserialize<List<Robot>>(File.ReadAllText("Data/Robots.json"), options),
                 Employees = JsonSerializer.Deserialize<List<Employee>>(File.ReadAllText("Data/Employees.json"), options),
                 Orders = JsonSerializer.Deserialize<List<Order>>(File.ReadAllText("Data/Orders.json"), options),
+                Shelves = JsonSerializer.Deserialize<List<Shelf>>(File.ReadAllText("Data/Shelves.json"), options)
             };
 
-            var commander = new Command(warehouse: warehouse);
+            Command commander = new Command(warehouse: warehouse);
 
 
 

@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 using WarehouseSimulator.Models;
 
 namespace WarehouseSimulator.Services
 {
-    public class  Command
+    public class Command
     {
         public Warehouse Warehouse { get; set; }
-        public  Command(Warehouse warehouse)
+        public Command(Warehouse warehouse)
         {
             this.Warehouse = warehouse;
             _ = RunMenuLoopAsync();
@@ -22,6 +17,7 @@ namespace WarehouseSimulator.Services
         private async Task RunMenuLoopAsync()
         {
             OrderService orderService = new OrderService(warehouse: Warehouse);
+            ProductService productService = new ProductService(warehouse: Warehouse);
 
             while (true)
             {
@@ -31,7 +27,7 @@ namespace WarehouseSimulator.Services
 
                 switch (nInput)
                 {
-                    case 1:
+                    case 1://Orders
                         Console.Clear();
                         Console.WriteLine("1. View Orders\n2. Add Order\n3. Remove Order\n4.Proccess Orders\n5.Back to Menu");
                         Console.Write("Choose number : ");
@@ -69,7 +65,7 @@ namespace WarehouseSimulator.Services
                                     if (choose.ToLower() == "yes" || choose.ToLower() == "y")
                                     {
                                         orderList.Clear();
-                                        
+
                                         readyToOrder = true;
                                         CatchOrderLoop(ref readyToOrder, ref orderList);
                                         Console.WriteLine("Added Successfully");
@@ -79,12 +75,12 @@ namespace WarehouseSimulator.Services
                                 }
                                 break;
                             case 3://Remove Order
-                                
+
                                 bool isFinish = false;
-                                    while (!isFinish)
-                                    {
-                                if (Warehouse.Orders.Count > 0)
+                                while (!isFinish)
                                 {
+                                    if (Warehouse.Orders.Count > 0)
+                                    {
                                         Console.Clear();
                                         foreach (Order orderItem in Warehouse.Orders)
                                         {
@@ -133,8 +129,8 @@ namespace WarehouseSimulator.Services
                                         break;
                                     }
                                 }
-                                
-                                
+
+
                                 break;
                             case 4://Proccess Orders
                                 //Console.Clear();
@@ -150,7 +146,7 @@ namespace WarehouseSimulator.Services
                                 {
                                     Console.Write("No Available Order !!");
                                 }
-                                    continue;
+                                continue;
                             case 5://Back to Menu
 
                                 break;
@@ -159,32 +155,120 @@ namespace WarehouseSimulator.Services
                         }
 
                         break;
-                    case 2:
+                    case 2://Products
                         Console.Clear();
                         Console.WriteLine("1. View Products\n2. Add Product\n3. Remove Product\n4.Back to Menu");
                         Console.Write("Choose number : ");
                         int.TryParse(Console.ReadLine(), out nInput);
+                        switch (nInput)
+                        {
+                            case 1://View Products
+                                Console.Clear();
+                                foreach (Product product in Warehouse.Products)
+                                {
+                                    Console.WriteLine(product.ToString());
+                                }
+                                break;
+                            case 2://Add 
+                                Console.Write("Product name : ");
+                                string productName = Console.ReadLine();
+
+                                bool isFinish1 = true;
+                                double productPrice;
+                                do
+                                {
+                                    Console.Write("Product price: ");
+                                    string price = Console.ReadLine();
+                                    isFinish1 = double.TryParse(price, out productPrice);
+                                } while (!isFinish1);
+
+                                bool isFinish2 = true;
+                                (int x, int y) productShelfLocation;
+                                do
+                                {
+                                    Console.Write("Product shelf location: ");
+                                    string locationString = Console.ReadLine();
+                                    //isFinish1 = (int x, int y).TryParse(price, out productPrice);
+                                } while (!isFinish1);
+
+                                Console.Write("Product stock: ");
+                                string productStock = Console.ReadLine();
+                                //productService.AddProduct(productName: productName, price: productPrice, shelfLocation: productShelfLocation, stock: productStock);
+
+                                break;
+                            case 3://Remove Product
+
+                                break;
+                            case 4://Back to Menu
+
+                                break;
+
+
+                        }
                         break;
-                    case 3:
+                    case 3://Employees
                         Console.Clear();
                         Console.WriteLine("1. View Employees\n2. Add Employee\n3. Remove Employee\n4.Back to Menu");
                         Console.Write("Choose number : ");
                         int.TryParse(Console.ReadLine(), out nInput);
+                        switch (nInput)
+                        {
+                            case 1://View Products
+                                Console.Clear();
+                                foreach (Employee employee in Warehouse.Employees)
+                                {
+                                    Console.WriteLine(employee.ToString());
+                                }
+                                break;
+                            case 2://Add Product
+
+                                break;
+                            case 3://Remove Product
+
+                                break;
+                            case 4://Back to Menu
+
+                                break;
+
+
+                        }
                         break;
-                    case 4:
+                    case 4://Robots
                         Console.Clear();
                         Console.WriteLine("1. View Robots\n2. Add Robot\n3. Remove Robot\n4.Back to Menu");
                         Console.Write("Choose number : ");
                         int.TryParse(Console.ReadLine(), out nInput);
+                        switch (nInput)
+                        {
+                            case 1://View Products
+                                Console.Clear();
+                                foreach (Robot robot in Warehouse.Robots)
+                                {
+                                    Console.WriteLine(robot.ToString());
+                                }
+                                break;
+                            case 2://Add Product
+
+                                break;
+                            case 3://Remove Product
+
+                                break;
+                            case 4://Back to Menu
+
+                                break;
+
+
+                        }
                         break;
                 }
-                
+
 
             }
 
         }
 
-        private void CatchOrderLoop(ref bool readyToOrder , ref List<OrderItem> orderList) {
+        private void CatchOrderLoop(ref bool readyToOrder, ref List<OrderItem> orderList)
+        {
             while (readyToOrder)
             {
                 if (orderList.Count >= 1)

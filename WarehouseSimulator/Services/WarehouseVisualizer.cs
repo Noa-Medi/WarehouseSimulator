@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WarehouseSimulator.Models;
 
 namespace WarehouseSimulator.Services
@@ -22,7 +19,7 @@ namespace WarehouseSimulator.Services
                     var robot = warehouse.Robots.FirstOrDefault(r =>
                         r.CurrentPosition.x == x && r.CurrentPosition.y == y);
                     var product = warehouse.Products.FirstOrDefault(p =>
-                        p.ShelfLocation.x == x && p.ShelfLocation.y == y);
+                        p.ShelfLocation.Value.x == x && p.ShelfLocation.Value.y == y);
 
                     if (robot != null)
                     {

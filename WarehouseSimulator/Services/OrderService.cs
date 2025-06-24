@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WarehouseSimulator.Models;
 using WarehouseSimulator.Utils;
@@ -10,21 +9,23 @@ namespace WarehouseSimulator.Services
 {
     public class OrderService
     {
-        public  Warehouse warehouse { get; set; }
+        public Warehouse Warehouse { get; set; }
 
-        public OrderService(Warehouse warehouse) => this.warehouse = warehouse;
-        public  void AddOrder(string customerEmail, List<OrderItem> orderItems) {
+        public OrderService(Warehouse warehouse) => this.Warehouse = warehouse;
+        public void AddOrder(string customerEmail, List<OrderItem> orderItems)
+        {
             Random random = new Random();
             int randomId = random.Next(100000, 999999);
-            Order newOrder = new Order(OrderId : randomId , CustomerEmail : customerEmail , Items : orderItems);
-            warehouse.Orders.Add(newOrder);
+            Order newOrder = new Order(OrderId: randomId, CustomerEmail: customerEmail, Items: orderItems);
+            Warehouse.Orders.Add(newOrder);
         }
-        public  bool RemoveOrder(int orderId)
+        public bool RemoveOrder(int orderId)
         {
-           
-                Order order = warehouse.Orders.First(o => o.OrderId == orderId);
-                if (order != null) {
-                warehouse.Orders.Remove(order);
+
+            Order order = Warehouse.Orders.First(o => o.OrderId == orderId);
+            if (order != null)
+            {
+                Warehouse.Orders.Remove(order);
                 return true;
 
             }
@@ -33,14 +34,15 @@ namespace WarehouseSimulator.Services
                 return false;
             }
         }
-        public  async Task ProsseccOrder(Order order  ) {
-       
+        public async Task ProsseccOrder(Order order)
+        {
+
             if (order != null && order.Status == "Pending")
             {
                 foreach (OrderItem item in order.Items)
                 {
                     order.Status = "Processing";
-                    var product = warehouse.Products.FirstOrDefault(p => p.Id == item.Id);
+                    var product = Warehouse.Products.FirstOrDefault(p => p.Id == item.Id);
                     if (product == null || product.Stock < item.Quantity)
                     {
                         Logger.Log($"⚠️ Out of stock: {product?.Name}. Restocking...", ConsoleColor.Red);
@@ -48,8 +50,16 @@ namespace WarehouseSimulator.Services
                         continue;
                     }
 
-                    Robot robot = await RobotService.WaitForAvailableRobotAsync(warehouse.Robots);
-                    var path = Pathfinder.FindPath(robot.CurrentPosition, product.ShelfLocation, warehouse.Grid);
+                    Robot robot = await RobotService.WaitForAvailableRobotAsync(Warehouse.Robots);
+                    if (product.ShelfLocation == null || !product.ShelfLocation.HasValue)
+                    {
+                        Logger.Log($"There is no assigned shelf for this Product {product.Name}", ConsoleColor.Red);
+                        continue;
+                    }
+
+                    // Now we know ShelfLocation has a value, so we can safely access it
+                    var shelfLocation = product.ShelfLocation.Value;
+                    var path = Pathfinder.FindPath(robot.CurrentPosition, shelfLocation, Warehouse.Grid);
 
                     Logger.Log($"🤖 Robot #{robot.Id} moving to {product.ShelfLocation}...", ConsoleColor.Yellow);
 
@@ -57,26 +67,26 @@ namespace WarehouseSimulator.Services
                     foreach (var step in path)
                     {
                         robot.CurrentPosition = step;
-                        WarehouseVisualizer.DrawWarehouse(warehouse);
+                        WarehouseVisualizer.DrawWarehouse(Warehouse);
                         await Task.Delay(300); // Adjust speed as needed
                     }
 
                     robot.TakeItem(item, product);
-                    WarehouseVisualizer.DrawWarehouse(warehouse);
+                    WarehouseVisualizer.DrawWarehouse(Warehouse);
 
                     // Move to packer (optional)
-                    var packer = warehouse.Employees.FirstOrDefault(e => e.Job == "Packer" && e.IsAvailable);
+                    var packer = Warehouse.Employees.FirstOrDefault(e => e.Job == "Packer" && e.IsAvailable);
                     if (packer != null)
                     {
-                        var packerPath = Pathfinder.FindPath(robot.CurrentPosition, packer.Position, warehouse.Grid);
+                        var packerPath = Pathfinder.FindPath(robot.CurrentPosition, packer.Position, Warehouse.Grid);
                         foreach (var step in packerPath)
                         {
                             robot.CurrentPosition = step;
-                            WarehouseVisualizer.DrawWarehouse(warehouse);
+                            WarehouseVisualizer.DrawWarehouse(Warehouse);
                             await Task.Delay(300);
                         }
                         robot.PlaceItem(item, packer);
-                        WarehouseVisualizer.DrawWarehouse(warehouse);
+                        WarehouseVisualizer.DrawWarehouse(Warehouse);
                     }
 
                     if (packer.Inventory.Count > 0)
@@ -87,13 +97,13 @@ namespace WarehouseSimulator.Services
                 }
 
             }
-        
 
-    }
 
-        private  void RestockProduct(int productId, int quantity)
+        }
+
+        private void RestockProduct(int productId, int quantity)
         {
-            var product = warehouse.Products.FirstOrDefault(p => productId == p.Id);
+            var product = Warehouse.Products.FirstOrDefault(p => productId == p.Id);
             product.Stock += quantity;
             Logger.Log($"🔄 Restocked {product.Name}. New stock: {product.Stock}", ConsoleColor.Blue);
         }
