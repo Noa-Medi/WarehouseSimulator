@@ -23,7 +23,7 @@ A console-based **warehouse management simulator** with real-time grid visualiza
 ### 📦 Prerequisites
 
 - [.NET 6.0 SDK or later](https://dotnet.microsoft.com/download)
-- (Optional) [Visual Studio 2022](https://visualstudio.microsoft.com/)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/)
 
 ### 🔧 Installation
 
@@ -128,21 +128,6 @@ Edit these files inside `/Data`:
 - `async/await` for robot motion  
 - ⏱ Configurable movement delay  
 - 🖥 Non-blocking console updates
-
----
-
-## 🤝 Contributing
-
-```bash
-# Fork and create a feature branch
-git checkout -b feature/AmazingFeature
-
-# Commit and push your changes
-git commit -m "Add amazing feature"
-git push origin feature/AmazingFeature
-
-# Then open a Pull Request 🙌
-```
 
 ---
 
