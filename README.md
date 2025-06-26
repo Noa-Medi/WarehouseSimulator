@@ -141,4 +141,4 @@ See [`LICENSE`](https://github.com/Noa-Medi/WarehouseSimulator/blob/b6927661b186
 ## 📬 Contact
 
 **Mehdi Abbasi** – Mehdi.abbass1386@gmail.com  
-🌐 [Project Repo](https://github.com/yourusername/warehouse-simulator)
+🌐 [Project Repo](https://github.com/Noa-Medi/WarehouseSimulator)
