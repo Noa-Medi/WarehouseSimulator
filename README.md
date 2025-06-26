@@ -134,7 +134,7 @@ Edit these files inside `/Data`:
 ## 📄 License
 
 Distributed under the **MIT License**.  
-See `LICENSE` file for more info.
+See [`LICENSE`](https://github.com/Noa-Medi/WarehouseSimulator/blob/b6927661b1863fc2c064c244420dfb37793a0a80/LICENSE) file for more info.
 
 ---
 
