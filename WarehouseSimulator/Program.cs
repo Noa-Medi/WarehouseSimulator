@@ -10,30 +10,44 @@ namespace WarehouseSimulator
 {
     internal class Program
     {
+        private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
+        {
+            Converters = { new TupleConverter() }
+        };
+
         static void Main(string[] args)
         {
-
-            var options = new JsonSerializerOptions
-            {
-                Converters = { new TupleConverter() }
-            };
-
-            var warehouse = new Warehouse
-            {
-                Products = JsonSerializer.Deserialize<List<Product>>(File.ReadAllText("Data/Products.json"), options),
-                Robots = JsonSerializer.Deserialize<List<Robot>>(File.ReadAllText("Data/Robots.json"), options),
-                Employees = JsonSerializer.Deserialize<List<Employee>>(File.ReadAllText("Data/Employees.json"), options),
-                Orders = JsonSerializer.Deserialize<List<Order>>(File.ReadAllText("Data/Orders.json"), options),
-                Shelves = JsonSerializer.Deserialize<List<Shelf>>(File.ReadAllText("Data/Shelves.json"), options)
-            };
-
-            Command commander = new Command(warehouse: warehouse);
-
-
-
+            var warehouse = InitializeWarehouseFromJson();
+            var commander = new Command(warehouse);
 
             Console.WriteLine("All orders processed!");
             Console.ReadLine(); // Keep console open
+        }
+
+        private static Warehouse InitializeWarehouseFromJson()
+        {
+            try
+            {
+                return new Warehouse
+                {
+                    Products = DeserializeFromFile<List<Product>>("Data/Products.json"),
+                    Robots = DeserializeFromFile<List<Robot>>("Data/Robots.json"),
+                    Employees = DeserializeFromFile<List<Employee>>("Data/Employees.json"),
+                    Orders = DeserializeFromFile<List<Order>>("Data/Orders.json"),
+                    Shelves = DeserializeFromFile<List<Shelf>>("Data/Shelves.json")
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading warehouse data: {ex.Message}");
+                throw;
+            }
+        }
+
+        private static T DeserializeFromFile<T>(string filePath)
+        {
+            var json = File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<T>(json, JsonOptions);
         }
     }
 }

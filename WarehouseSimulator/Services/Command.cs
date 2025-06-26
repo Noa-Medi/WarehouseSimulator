@@ -8,54 +8,62 @@ namespace WarehouseSimulator.Services
 {
     public class Command
     {
-        public Warehouse Warehouse { get; set; }
+        private readonly Warehouse _warehouse;
+        private readonly OrderService _orderService;
+        private readonly ProductService _productService;
+        private readonly EmployeeService _employeeService;
+        private readonly RobotService _robotService;
+
         public Command(Warehouse warehouse)
         {
-            this.Warehouse = warehouse;
+            _warehouse = warehouse;
+            _orderService = new OrderService(warehouse);
+            _productService = new ProductService(warehouse);
+            _employeeService = new EmployeeService(warehouse);
+            _robotService = new RobotService(warehouse);
+
             _ = RunMenuLoopAsync();
         }
 
         private async Task RunMenuLoopAsync()
         {
-            OrderService orderService = new OrderService(warehouse: Warehouse);
-            ProductService productService = new ProductService(warehouse: Warehouse);
-            EmployeeServic employeeServic = new EmployeeServic(warehouse: Warehouse);
-            RobotService robotService = new RobotService(warehouse: Warehouse);
-
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("=== Warehouse Management System ===");
-                Console.WriteLine("1. Orders\n2. Products\n3. Employees\n4. Robots\n5. Exit");
-                Console.Write("Choose option: ");
-                int.TryParse(Console.ReadLine(), out int mainChoice);
+                DisplayMainMenu();
+
+                if (!int.TryParse(Console.ReadLine(), out int mainChoice))
+                {
+                    DisplayInvalidOption();
+                    continue;
+                }
 
                 switch (mainChoice)
                 {
-                    case 1: // Orders
-                        await HandleOrdersMenu(orderService);
-                        break;
-                    case 2: // Products
-                        HandleProductsMenu(productService);
-                        break;
-                    case 3: // Employees
-                        HandleEmployeesMenu(employeeServic);
-                        break;
-                    case 4: // Robots
-                        HandleRobotsMenu(robotService);
-                        break;
-                    case 5: // Exit
-                        Console.WriteLine("Exiting system...");
-                        return;
-                    default:
-                        Console.WriteLine("Invalid option!");
-                        WaitForUser();
-                        break;
+                    case 1: await HandleOrdersMenu(); break;
+                    case 2: HandleProductsMenu(); break;
+                    case 3: HandleEmployeesMenu(); break;
+                    case 4: HandleRobotsMenu(); break;
+                    case 5: return; // Exit
+                    default: DisplayInvalidOption(); break;
                 }
             }
         }
 
-        private async Task HandleOrdersMenu(OrderService orderService)
+        private void DisplayMainMenu()
+        {
+            Console.WriteLine("=== Warehouse Management System ===");
+            Console.WriteLine("1. Orders\n2. Products\n3. Employees\n4. Robots\n5. Exit");
+            Console.Write("Choose option: ");
+        }
+
+        private void DisplayInvalidOption()
+        {
+            Console.WriteLine("Invalid option!");
+            WaitForUser();
+        }
+
+        private async Task HandleOrdersMenu()
         {
             while (true)
             {
@@ -69,13 +77,13 @@ namespace WarehouseSimulator.Services
                 {
                     case 1: // View Orders
                         Console.Clear();
-                        if (Warehouse.Orders.Count == 0)
+                        if (_warehouse.Orders.Count == 0)
                         {
                             Console.WriteLine("No orders available!");
                         }
                         else
                         {
-                            foreach (Order order in Warehouse.Orders)
+                            foreach (Order order in _warehouse.Orders)
                             {
                                 Console.WriteLine(order.ToString());
                             }
@@ -89,7 +97,7 @@ namespace WarehouseSimulator.Services
                         string email = Console.ReadLine();
 
                         Console.WriteLine("Available Products:");
-                        foreach (Product product in Warehouse.Products)
+                        foreach (Product product in _warehouse.Products)
                         {
                             Console.WriteLine(product.ToString());
                         }
@@ -110,7 +118,7 @@ namespace WarehouseSimulator.Services
                             Console.Write("Confirm order (Y/N)? ");
                             if (Console.ReadLine().ToLower() == "y")
                             {
-                                orderService.AddOrder(email, orderList);
+                                _orderService.AddOrder(email, orderList);
                                 Console.WriteLine("Order added successfully!");
                             }
                         }
@@ -119,11 +127,11 @@ namespace WarehouseSimulator.Services
 
                     case 3: // Remove Order
                         bool removing = true;
-                        while (removing && Warehouse.Orders.Count > 0)
+                        while (removing && _warehouse.Orders.Count > 0)
                         {
                             Console.Clear();
                             Console.WriteLine("Current Orders:");
-                            foreach (Order order in Warehouse.Orders)
+                            foreach (Order order in _warehouse.Orders)
                             {
                                 Console.WriteLine(order.ToString());
                             }
@@ -131,14 +139,14 @@ namespace WarehouseSimulator.Services
                             Console.Write("Enter Order ID to remove (or 0 to cancel): ");
                             if (int.TryParse(Console.ReadLine(), out int orderId) && orderId != 0)
                             {
-                                Order orderToRemove = Warehouse.Orders.Find(o => o.OrderId == orderId);
+                                Order orderToRemove = _warehouse.Orders.Find(o => o.OrderId == orderId);
                                 if (orderToRemove != null)
                                 {
                                     Console.WriteLine($"\nOrder to remove:\n{orderToRemove}");
                                     Console.Write("Are you sure (Y/N)? ");
                                     if (Console.ReadLine().ToLower() == "y")
                                     {
-                                        if (orderService.RemoveOrder(orderId))
+                                        if (_orderService.RemoveOrder(orderId))
                                         {
                                             Console.WriteLine("Order removed successfully!");
                                         }
@@ -154,7 +162,7 @@ namespace WarehouseSimulator.Services
                                 removing = false;
                             }
 
-                            if (Warehouse.Orders.Count > 0)
+                            if (_warehouse.Orders.Count > 0)
                             {
                                 Console.Write("Remove another order (Y/N)? ");
                                 removing = Console.ReadLine().ToLower() == "y";
@@ -164,12 +172,12 @@ namespace WarehouseSimulator.Services
 
                     case 4: // Process Orders
                         Console.Clear();
-                        if (Warehouse.Orders.Count > 0)
+                        if (_warehouse.Orders.Count > 0)
                         {
-                            foreach (Order order in Warehouse.Orders.ToList()) // ToList to avoid modification issues
+                            foreach (Order order in _warehouse.Orders.ToList()) // ToList to avoid modification issues
                             {
-                                WarehouseVisualizer.DrawWarehouse(Warehouse);
-                                await orderService.ProcessOrder(order);
+                                WarehouseVisualizer.DrawWarehouse(_warehouse);
+                                await _orderService.ProcessOrder(order);
                                 Console.WriteLine($"Processed order {order.OrderId}");
                                 WaitForUser();
                             }
@@ -192,7 +200,7 @@ namespace WarehouseSimulator.Services
             }
         }
 
-        private void HandleProductsMenu(ProductService productService)
+        private void HandleProductsMenu()
         {
             while (true)
             {
@@ -206,13 +214,13 @@ namespace WarehouseSimulator.Services
                 {
                     case 1: // View Products
                         Console.Clear();
-                        if (Warehouse.Products.Count == 0)
+                        if (_warehouse.Products.Count == 0)
                         {
                             Console.WriteLine("No products available!");
                         }
                         else
                         {
-                            foreach (Product product in Warehouse.Products)
+                            foreach (Product product in _warehouse.Products)
                             {
                                 Console.WriteLine(product.ToString());
                             }
@@ -229,14 +237,14 @@ namespace WarehouseSimulator.Services
                         int shelfId = GetValidInt("Shelf ID: ");
                         int stock = GetValidInt("Initial Stock: ");
 
-                        productService.AddProduct(name, price, shelfId, stock);
+                        _productService.AddProduct(name, price, shelfId, stock);
                         Console.WriteLine("Product added successfully!");
                         WaitForUser();
                         break;
 
                     case 3: // Remove Product
                         Console.Clear();
-                        if (Warehouse.Products.Count == 0)
+                        if (_warehouse.Products.Count == 0)
                         {
                             Console.WriteLine("No products available to remove!");
                             WaitForUser();
@@ -244,7 +252,7 @@ namespace WarehouseSimulator.Services
                         }
 
                         Console.WriteLine("Current Products:");
-                        foreach (Product product in Warehouse.Products)
+                        foreach (Product product in _warehouse.Products)
                         {
                             Console.WriteLine(product.ToString());
                         }
@@ -252,14 +260,14 @@ namespace WarehouseSimulator.Services
                         Console.Write("Enter Product ID to remove (or 0 to cancel): ");
                         if (int.TryParse(Console.ReadLine(), out int productId) && productId != 0)
                         {
-                            Product productToRemove = Warehouse.Products.Find(p => p.Id == productId);
+                            Product productToRemove = _warehouse.Products.Find(p => p.Id == productId);
                             if (productToRemove != null)
                             {
                                 Console.WriteLine($"\nProduct to remove:\n{productToRemove}");
                                 Console.Write("Are you sure (Y/N)? ");
                                 if (Console.ReadLine().ToLower() == "y")
                                 {
-                                    Warehouse.Products.Remove(productToRemove);
+                                    _warehouse.Products.Remove(productToRemove);
                                     Console.WriteLine("Product removed successfully!");
                                 }
                             }
@@ -282,7 +290,7 @@ namespace WarehouseSimulator.Services
             }
         }
 
-        private void HandleEmployeesMenu(EmployeeServic employeeService)
+        private void HandleEmployeesMenu()
         {
             while (true)
             {
@@ -296,13 +304,13 @@ namespace WarehouseSimulator.Services
                 {
                     case 1: // View Employees
                         Console.Clear();
-                        if (Warehouse.Employees.Count == 0)
+                        if (_warehouse.Employees.Count == 0)
                         {
                             Console.WriteLine("No employees available!");
                         }
                         else
                         {
-                            foreach (Employee employee in Warehouse.Employees)
+                            foreach (Employee employee in _warehouse.Employees)
                             {
                                 Console.WriteLine(employee.ToString());
                             }
@@ -321,14 +329,14 @@ namespace WarehouseSimulator.Services
                         int x = GetValidInt("Position X: ");
                         int y = GetValidInt("Position Y: ");
 
-                        employeeService.AddEmployee(name, job, (x, y));
+                        _employeeService.AddEmployee(name, job, (x, y));
                         Console.WriteLine("Employee added successfully!");
                         WaitForUser();
                         break;
 
                     case 3: // Remove Employee
                         Console.Clear();
-                        if (Warehouse.Employees.Count == 0)
+                        if (_warehouse.Employees.Count == 0)
                         {
                             Console.WriteLine("No employees available to remove!");
                             WaitForUser();
@@ -336,7 +344,7 @@ namespace WarehouseSimulator.Services
                         }
 
                         Console.WriteLine("Current Employees:");
-                        foreach (Employee employee in Warehouse.Employees)
+                        foreach (Employee employee in _warehouse.Employees)
                         {
                             Console.WriteLine(employee.ToString());
                         }
@@ -344,14 +352,14 @@ namespace WarehouseSimulator.Services
                         Console.Write("Enter Employee ID to remove (or 0 to cancel): ");
                         if (int.TryParse(Console.ReadLine(), out int employeeId) && employeeId != 0)
                         {
-                            Employee employeeToRemove = Warehouse.Employees.Find(e => e.Id == employeeId);
+                            Employee employeeToRemove = _warehouse.Employees.Find(e => e.Id == employeeId);
                             if (employeeToRemove != null)
                             {
                                 Console.WriteLine($"\nEmployee to remove:\n{employeeToRemove}");
                                 Console.Write("Are you sure (Y/N)? ");
                                 if (Console.ReadLine().ToLower() == "y")
                                 {
-                                    Warehouse.Employees.Remove(employeeToRemove);
+                                    _warehouse.Employees.Remove(employeeToRemove);
                                     Console.WriteLine("Employee removed successfully!");
                                 }
                             }
@@ -374,7 +382,7 @@ namespace WarehouseSimulator.Services
             }
         }
 
-        private void HandleRobotsMenu(RobotService robotService)
+        private void HandleRobotsMenu()
         {
             while (true)
             {
@@ -388,13 +396,13 @@ namespace WarehouseSimulator.Services
                 {
                     case 1: // View Robots
                         Console.Clear();
-                        if (Warehouse.Robots.Count == 0)
+                        if (_warehouse.Robots.Count == 0)
                         {
                             Console.WriteLine("No robots available!");
                         }
                         else
                         {
-                            foreach (Robot robot in Warehouse.Robots)
+                            foreach (Robot robot in _warehouse.Robots)
                             {
                                 Console.WriteLine(robot.ToString());
                             }
@@ -408,14 +416,14 @@ namespace WarehouseSimulator.Services
                         int x = GetValidInt("Position X: ");
                         int y = GetValidInt("Position Y: ");
 
-                        robotService.AddRobot((x, y), speed);
+                        _robotService.AddRobot((x, y), speed);
                         Console.WriteLine("Robot added successfully!");
                         WaitForUser();
                         break;
 
                     case 3: // Remove Robot
                         Console.Clear();
-                        if (Warehouse.Robots.Count == 0)
+                        if (_warehouse.Robots.Count == 0)
                         {
                             Console.WriteLine("No robots available to remove!");
                             WaitForUser();
@@ -423,7 +431,7 @@ namespace WarehouseSimulator.Services
                         }
 
                         Console.WriteLine("Current Robots:");
-                        foreach (Robot robot in Warehouse.Robots)
+                        foreach (Robot robot in _warehouse.Robots)
                         {
                             Console.WriteLine(robot.ToString());
                         }
@@ -431,14 +439,14 @@ namespace WarehouseSimulator.Services
                         Console.Write("Enter Robot ID to remove (or 0 to cancel): ");
                         if (int.TryParse(Console.ReadLine(), out int robotId) && robotId != 0)
                         {
-                            Robot robotToRemove = Warehouse.Robots.Find(r => r.Id == robotId);
+                            Robot robotToRemove = _warehouse.Robots.Find(r => r.Id == robotId);
                             if (robotToRemove != null)
                             {
                                 Console.WriteLine($"\nRobot to remove:\n{robotToRemove}");
                                 Console.Write("Are you sure (Y/N)? ");
                                 if (Console.ReadLine().ToLower() == "y")
                                 {
-                                    Warehouse.Robots.Remove(robotToRemove);
+                                    _warehouse.Robots.Remove(robotToRemove);
                                     Console.WriteLine("Robot removed successfully!");
                                 }
                             }
@@ -477,7 +485,7 @@ namespace WarehouseSimulator.Services
 
                 if (int.TryParse(input, out int productId))
                 {
-                    Product product = Warehouse.Products.Find(p => p.Id == productId);
+                    Product product = _warehouse.Products.Find(p => p.Id == productId);
                     if (product != null)
                     {
                         int quantity = GetValidInt("Quantity: ");

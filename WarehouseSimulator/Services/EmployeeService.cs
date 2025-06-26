@@ -4,11 +4,11 @@ using WarehouseSimulator.Models;
 
 namespace WarehouseSimulator.Services
 {
-    public class EmployeeServic
+    public class EmployeeService
     {
         public Warehouse Warehouse { get; set; }
 
-        public EmployeeServic(Warehouse warehouse) => this.Warehouse = warehouse;
+        public EmployeeService(Warehouse warehouse) => this.Warehouse = warehouse;
 
         public void AddEmployee(string name, string job, (int x, int y) position)
         {

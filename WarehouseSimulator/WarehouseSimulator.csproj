@@ -86,7 +86,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Command.cs" />
-    <Compile Include="Services\EmployeeServic.cs" />
+    <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\RobotService.cs" />
