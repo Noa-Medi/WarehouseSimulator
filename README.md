@@ -140,5 +140,5 @@ See `LICENSE` file for more info.
 
 ## 📬 Contact
 
-**Your Name** – your.email@example.com  
+**Mehdi Abbasi** – Mehdi.abbass1386@gmail.com  
 🌐 [Project Repo](https://github.com/yourusername/warehouse-simulator)
