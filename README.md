@@ -28,8 +28,8 @@ A console-based **warehouse management simulator** with real-time grid visualiza
 ### 🔧 Installation
 
 ```bash
-git clone https://github.com/yourusername/warehouse-simulator.git
-cd warehouse-simulator
+git clone https://github.com/Noa-Medi/WarehouseSimulator
+cd WarehouseSimulator
 dotnet run
 ```
 
