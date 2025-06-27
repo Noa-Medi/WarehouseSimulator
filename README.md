@@ -23,13 +23,13 @@ A console-based **warehouse management simulator** with real-time grid visualiza
 ### 📦 Prerequisites
 
 - [.NET 6.0 SDK or later](https://dotnet.microsoft.com/download)
-- (Optional) [Visual Studio 2022](https://visualstudio.microsoft.com/)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/)
 
 ### 🔧 Installation
 
 ```bash
-git clone https://github.com/yourusername/warehouse-simulator.git
-cd warehouse-simulator
+git clone https://github.com/Noa-Medi/WarehouseSimulator.git
+cd WarehouseSimulator/WarehouseSimulator
 dotnet run
 ```
 
@@ -131,29 +131,14 @@ Edit these files inside `/Data`:
 
 ---
 
-## 🤝 Contributing
-
-```bash
-# Fork and create a feature branch
-git checkout -b feature/AmazingFeature
-
-# Commit and push your changes
-git commit -m "Add amazing feature"
-git push origin feature/AmazingFeature
-
-# Then open a Pull Request 🙌
-```
-
----
-
 ## 📄 License
 
 Distributed under the **MIT License**.  
-See `LICENSE` file for more info.
+See [`LICENSE`](https://github.com/Noa-Medi/WarehouseSimulator/blob/b6927661b1863fc2c064c244420dfb37793a0a80/LICENSE) file for more info.
 
 ---
 
 ## 📬 Contact
 
-**Your Name** – your.email@example.com  
-🌐 [Project Repo](https://github.com/yourusername/warehouse-simulator)
+**Mehdi Abbasi** – Mehdi.abbass1386@gmail.com  
+🌐 [Project Repo](https://github.com/Noa-Medi/WarehouseSimulator)
